@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>KAI&#39;s HomePage</title>
-    <link>https://statlearning.github.io/</link>
+    <link>https://jiandan94.github.io/</link>
     <description>Recent content on KAI&#39;s HomePage</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Mon, 23 Mar 2020 21:11:58 +0800</lastBuildDate>
     
-        <atom:link href="https://statlearning.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://jiandan94.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>提升R的运算速度</title>
-      <link>https://statlearning.github.io/2020/03/myfirst/</link>
+      <link>https://jiandan94.github.io/2020/03/myfirst/</link>
       <pubDate>Mon, 23 Mar 2020 21:11:58 +0800</pubDate>
       
-      <guid>https://statlearning.github.io/2020/03/myfirst/</guid>
+      <guid>https://jiandan94.github.io/2020/03/myfirst/</guid>
       <description>最近有读者私信希望介绍R并行计算的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽调参</description>
     </item>
     
