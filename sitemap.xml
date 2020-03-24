@@ -45,7 +45,7 @@
   </url>
   
   <url>
-    <loc>https://jiandan94.github.io/2020/03/myfirst/</loc>
+    <loc>https://jiandan94.github.io/2020/03/rparallel/</loc>
     <lastmod>2020-03-23T21:11:58+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -56,6 +56,11 @@
     <lastmod>2020-03-23T21:11:58+08:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://jiandan94.github.io/about/</loc>
+    <priority>0</priority>
   </url>
   
   <url>

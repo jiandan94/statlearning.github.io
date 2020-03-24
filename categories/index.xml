@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on KAI&#39;s HomePage</title>
+    <title>Categories on KAI-StatLearning</title>
     <link>https://jiandan94.github.io/categories/</link>
-    <description>Recent content in Categories on KAI&#39;s HomePage</description>
+    <description>Recent content in Categories on KAI-StatLearning</description>
     <generator>Hugo -- gohugo.io</generator>
     <lastBuildDate>Mon, 23 Mar 2020 21:11:58 +0800</lastBuildDate>
     
@@ -12,11 +12,29 @@
     
     <item>
       <title>提升R的运算速度</title>
-      <link>https://jiandan94.github.io/2020/03/myfirst/</link>
+      <link>https://jiandan94.github.io/2020/03/rparallel/</link>
       <pubDate>Mon, 23 Mar 2020 21:11:58 +0800</pubDate>
       
-      <guid>https://jiandan94.github.io/2020/03/myfirst/</guid>
+      <guid>https://jiandan94.github.io/2020/03/rparallel/</guid>
       <description>最近有读者私信希望介绍R并行计算的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽调参</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://jiandan94.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/about/</guid>
+      <description>关于我 我目前在重庆大学数学与统计学院攻读统计学专业博士学位，研究方向为变量选择、统计学习、低秩空间学习。这个网站主要记录我在学习、生活中的一些体会。
+学习经历 2013 - 2017 重庆大学数学与统计学院统计学专业 本科学习
+2017 - 2019 重庆大学数学与统计学院统计学专业 硕士学习
+2019 - 现在 重庆大学数学与统计学院统计学专业 硕博连读
+已发表论文 2019
+[1] Qi K, Yang H, Hu Q, et al. A new adaptive weighted imbalanced data classifier via improved support vector machines with high-dimension nature[J]. Knowledge-Based Systems, 2019, 185: 104933.
+期刊审稿人 IEEE Transactions on Cybernetics, Journal of Computational Methods in Sciences and Engineering
+联系方式 qkai94@163.com
+谷歌学术
+ResearchGate</description>
     </item>
     
   </channel>

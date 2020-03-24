@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>
+        提升R的运算速度 - KAI-StatLearning
+      </title>
+    <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  
+  <meta name="theme-color" content="#000000" />
+  
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <meta name="description" content="最近有读者私信希望介绍R并行计算的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽调参" />
+  <meta name="generator" content="Hugo 0.68.1 with theme pure" />
+  <title>提升R的运算速度 - KAI-StatLearning</title>
+  
+  
+  <link rel="stylesheet" href="https://jiandan94.github.io/css/style.min.7dc20efbc53647d41aa9ddea0c48e59300223d084e66ea0cbe7c30bd88903acc.css">
+  
+  <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
+  <meta property="og:title" content="提升R的运算速度" />
+<meta property="og:description" content="最近有读者私信希望介绍R并行计算的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽调参" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiandan94.github.io/2020/03/rparallel/" />
+<meta property="article:published_time" content="2020-03-23T21:11:58+08:00" />
+<meta property="article:modified_time" content="2020-03-23T21:11:58+08:00" />
+<meta itemprop="name" content="提升R的运算速度">
+<meta itemprop="description" content="最近有读者私信希望介绍R并行计算的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽调参">
+<meta itemprop="datePublished" content="2020-03-23T21:11:58&#43;08:00" />
+<meta itemprop="dateModified" content="2020-03-23T21:11:58&#43;08:00" />
+<meta itemprop="wordCount" content="3386">
+
+
+
+<meta itemprop="keywords" content="R语言,算法," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="提升R的运算速度"/>
+<meta name="twitter:description" content="最近有读者私信希望介绍R并行计算的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽调参"/>
+
+  <!--[if lte IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+    <![endif]-->
+
+  <!--[if lt IE 9]>
+      <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+  </head>
+
+  
+  
+
+  <body class="main-center theme-black" itemscope itemtype="http://schema.org/WebPage"><header class="header" itemscope itemtype="http://schema.org/WPHeader">
+    <div class="slimContent">
+      <div class="navbar-header">
+        <div class="profile-block text-center">
+          <a id="avatar" href="https://www.researchgate.net/profile/Kai_Qi7" target="_blank">
+            <img class="img-circle img-rotate" src="https://jiandan94.github.io/qkai.jpg" width="200" height="200">
+          </a>
+          <h2 id="name" class="hidden-xs hidden-sm">齐 凯</h2>
+          <h3 id="title" class="hidden-xs hidden-sm hidden-md">统计学在读博士</h3>
+          <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i>重庆, 中国</small>
+        </div><div class="search" id="search-form-wrap">
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i
+                        class="icon icon-search"></i></button>
+            </span>
+        </div>
+        <div class="ins-search">
+            <div class="ins-search-mask"></div>
+            <div class="ins-search-container">
+                <div class="ins-input-wrapper">
+                    <input type="text" class="ins-search-input" placeholder="想要查找什么..."
+                        x-webkit-speech />
+                    <button type="button" class="close ins-close ins-selectable" data-dismiss="modal"
+                        aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="ins-section-wrapper">
+                    <div class="ins-section-container"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+        <ul class="nav navbar-nav main-nav">
+            <li class="menu-item menu-item-home">
+                <a href="/">
+                    <i class="icon icon-home-fill"></i>
+                  <span class="menu-title">主页</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-archives">
+                <a href="/posts/">
+                    <i class="icon icon-archives-fill"></i>
+                  <span class="menu-title">归档</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-categories">
+                <a href="/categories/">
+                    <i class="icon icon-folder"></i>
+                  <span class="menu-title">分类</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-tags">
+                <a href="/tags/">
+                    <i class="icon icon-tags"></i>
+                  <span class="menu-title">标签</span>
+                </a>
+            </li>
+            <li class="menu-item menu-item-about">
+                <a href="/about/">
+                    <i class="icon icon-cup-fill"></i>
+                  <span class="menu-title">关于</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+<aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content"><p>Welcome to StatLeaning!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      <div class="widget">
+    <h3 class="widget-title"> 分类</h3>
+    <div class="widget-body">
+        <ul class="category-list">
+            <li class="category-list-item"><a href="https://jiandan94.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">1</span></li>
+        </ul>
+    </div>
+</div>
+      <div class="widget">
+    <h3 class="widget-title"> 标签</h3>
+    <div class="widget-body">
+        <ul class="tag-list">
+            
+            
+            <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
+                    class="tag-list-count">1</span></li>
+            
+            
+            <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
+                    class="tag-list-count">1</span></li>
+            
+        </ul>
+
+    </div>
+</div>
+      
+<div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+        <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://jiandan94.github.io/2020/03/rparallel/" class="title">提升R的运算速度</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-03-23 21:11:58 &#43;0800 CST" itemprop="datePublished">2020-03-23</time>
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+  </div>
+</aside>
+
+    
+    
+<aside class="sidebar sidebar-toc collapse" id="collapseToc" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    <h4 class="toc-title">文章目录</h4>
+    <nav id="toc" class="js-toc toc">
+
+    </nav>
+  </div>
+</aside>
+<main class="main" role="main"><div class="content">
+  <article id="-" class="article article-type-" itemscope
+    itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      <h1 itemprop="name">
+  <a
+    class="article-title"
+    href="/2020/03/rparallel/"
+    >提升R的运算速度</a
+  >
+</h1>
+
+      <div class="article-meta">
+        
+<span class="article-date">
+  <i class="icon icon-calendar-check"></i>&nbsp;
+<a href="https://jiandan94.github.io/2020/03/rparallel/" class="article-date">
+  <time datetime="2020-03-23 21:11:58 &#43;0800 CST" itemprop="datePublished">2020-03-23</time>
+</a>
+</span>
+<span class="article-category">
+  <i class="icon icon-folder"></i>&nbsp;
+  <a class="article-category-link" href="/categories/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+</span>  
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>&nbsp;
+    <a class="article-tag-link" href="/tags/r%E8%AF%AD%E8%A8%80/"> R语言 </a>
+    <a class="article-tag-link" href="/tags/%E7%AE%97%E6%B3%95/"> 算法 </a>
+  </span>
+
+	<span class="article-read hidden-xs">
+	    <i class="icon icon-eye-fill" aria-hidden="true"></i>
+	    <span id="busuanzi_container_page_pv">
+			<span id="busuanzi_value_page_pv">0</span>
+		</span>
+	</span>
+        <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2020/03/rparallel/#comments"
+            class="article-comment-link">评论</a></span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3386字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7分 </span>
+      </div>
+    </div>
+    <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
+      <p>最近有读者私信希望介绍<strong>R并行计算</strong>的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽<strong>调参侠</strong>定深有感触。</p>
+<p>不过我觉得饭要一口一口吃，如果算法先天不足、设计不合理，指望通过某个函数或程序包暴力提升运算速度，就很难得到满意的结果。</p>
+<p>因此，我打算从一些简单的细节入手，给大家分享R运算速度提升的常见方法和思维误区。</p>
+<h2 id="1-内置函数与向量化思维">1. 内置函数与向量化思维</h2>
+<p>R对常见的运算如矩阵乘积，进行过专门的优化。那么，我们应当有意识将算法中的相关部分转用R优化过的内置函数处理，从而降低计算成本。</p>
+<p>又如，我们在学习模型时，常常看到作者用分量形式展示模型的求解过程——虽然这令人易懂，但让我们在设计算法时极易忽视将其向量化，最后造成计算开销骤增。</p>
+<h3 id="--案例展示">- 案例展示</h3>
+<p>我们不妨考虑不带截距项的单变量最小二乘模型</p>
+<p>$$\hat{\beta}=arg\min\sum_{i=1}^n\left( y_i - x_i\hat{\beta}\right)^2$$</p>
+<p>很容易得到最小二乘解为</p>
+<p>$$\hat{\beta} = \frac{\sum_{i=1}^nx_iy_i}{\sum_{i=1}^nx_i^2}$$</p>
+<p>这时，你可能将程序写成</p>
+<pre><code class="language-r{.line-numbers}">## 算法1
+ols1 &lt;- function(x, y){
+  a1 &lt;- 0
+  a2 &lt;- 0
+  for(i in 1:length(y)){
+    a1 &lt;- a1 + x[i]*y[i]
+    a2 &lt;- a2 + x[i]^2
+  }
+  return(a1/a2)
+}
+</code></pre>
+<p>假如你知道R中<code>*</code>的用法，你可能会将程序写成</p>
+<pre><code class="language-r{.line-numbers}">## 算法2
+ols2 &lt;- function(x, y){
+  return(sum(x*y)/sum(x^2))
+}
+</code></pre>
+<p><strong>当然你还可以写成向量形式</strong></p>
+<pre><code class="language-r{.line-numbers}">## 算法3
+ols3 &lt;- function(x, y){
+  return(c(x%*%y/x%*%x))
+}
+</code></pre>
+<p>为了揭示这三者计算效率的差别，我们不妨从标准正态分布中产生1000个观测，重复计算100次的结果如下</p>
+<pre><code class="language-r">&gt; x &lt;- rnorm(1000)
+&gt; y &lt;- x*2 + 0.1*rnorm(1000)
+&gt; system.time(# 算法1
++   replicate(100, ols1(x, y))
++ )
+用户 系统 流逝 
+0.02 0.00 0.02 
+&gt; system.time(# 算法2
++   replicate(100, ols2(x, y))
++ )
+用户 系统 流逝 
+0.01 0.00 0.01 
+&gt; system.time(# 算法3
++   replicate(100, ols3(x, y))
++ )
+用户 系统 流逝 
+   0    0    0 
+</code></pre>
+<p>结果是显然的：向量化的运算比<code>for</code>循环效率明显高。因此，我们要记住 <strong>能避免使用<code>for</code>循环就避免使用，</strong> 因为<code>for</code>循环在R中很低效。</p>
+<p>善用R内置函数与向量化思维是很多新手易忽视的技巧。这个例子提醒大家须将其铭记于心。</p>
+<h2 id="2-警惕apply族函数">2. 警惕apply族函数</h2>
+<p>稍有R常识的读者可能怀疑我题目写错了，因为大家印象中<code>apply</code>族函数可以简化代码和提升效率，所以要广泛使用而不是警惕啊。简化代码我同意，但提升效率真的不一定正确。</p>
+<h3 id="--apply函数">- apply函数</h3>
+<p>我们先看最常见的<code>apply</code>函数的用法</p>
+<pre><code class="language-r">apply(X, MARGIN, FUN, ...)
+</code></pre>
+<p>其中<code>X</code>表示一个数组或者矩阵；<code>MARGIN</code>表示维度，1表示按行计算，2表示按列计算；<code>FUN</code>是需要施加在<code>X</code>的行或者列上的函数。</p>
+<p>例如，我们希望得到矩阵<code>x</code>每一行的标准差。利用<code>for</code>循环，我们可以将函数写成</p>
+<pre><code class="language-r{.line-numbers}">myrowsd1 &lt;- function(x){
+  n &lt;- nrow(x)
+  p &lt;- ncol(x)
+  rowsd &lt;- c()
+  for(i in 1:n){
+    rowsd &lt;- c(rowsd, sqrt(sum((x[i,] - mean(x[i,]))^2)/(p - 1)))
+  }
+  return(rowsd)
+}
+</code></pre>
+<p>有了前面的向量化意识后，我们可以试着将代码写成</p>
+<pre><code class="language-r{.line-numbers}">## 算法2
+myrowsd2 &lt;- function(x){
+  n &lt;- nrow(x)
+  p &lt;- ncol(x)
+  rmean &lt;- rowMeans(x)
+  xbar &lt;- matrix(rep(rmean, p), ncol = p)
+  rowsd &lt;- sqrt(rowSums((x - xbar)^2)/(p - 1))
+  return(rowsd)
+}
+</code></pre>
+<p>下面利用<code>apply</code>将<code>sd</code>函数作用到<code>x</code>的每一行上，立即得到我们想要的结果</p>
+<pre><code class="language-r{.line-numbers}">## 算法3
+myrowsd3 &lt;- function(x){
+  return(apply(x, 1, sd))
+}
+</code></pre>
+<p>从代码上看，<code>apply</code>函数最终的代码确实简洁漂亮。然而，是美与实力兼有还是花瓶一个，需要实践出真知。</p>
+<p>为了比较这三种算法的差异，我们从正态分布中产生1000行10列的矩阵，重复100次后得到</p>
+<pre><code class="language-r">&gt; x &lt;- matrix(rnorm(10000), ncol = 10)
+&gt; system.time(# 算法1
++   replicate(100, myrowsd1(x))
++ )
+用户 系统 流逝 
+2.08 0.19 2.37 
+&gt; system.time(# 算法2
++   replicate(100, myrowsd2(x))
++ )
+用户 系统 流逝 
+0.03 0.04 0.08 
+&gt; system.time(# 算法3
++   replicate(100, myrowsd3(x))
++ )
+用户 系统 流逝 
+2.52 0.02 2.58 
+</code></pre>
+<p>结果令人大跌眼镜——<code>apply</code>函数耗时最多！使用内置函数<code>rowMeans</code>和<code>rowSums</code>的<strong>算法2最高效。</strong></p>
+<h3 id="--并行apply函数">- 并行apply函数</h3>
+<p>可否让<code>apply</code>函数的简洁与高效并存呢？考虑到<code>apply</code>使用<code>FUN</code>的过程是相互独立的，所以并行计算是个可行的思路。</p>
+<p>在R中已经内置<code>parallel</code>程序包，可以使用类似<code>apply</code>但能多线程运算的<code>parRapply</code>（对矩阵的行进行处理）命令。它的基本调用形式为</p>
+<pre><code class="language-r">cl &lt;- makeCluster(&lt;size of pool&gt;)# 建立并行线程数
+parRapply(cl, x, FUN)
+stopCluster(cl)# 关闭并行
+</code></pre>
+<p>我们利用并行<code>apply</code>命令重新计算上述问题得到</p>
+<pre><code class="language-r">&gt; library(parallel)
+&gt; cl &lt;- makeCluster(2)# 并行两次
+&gt; system.time(# 算法3
++   replicate(100, parRapply(cl, x, sd))
++ )
+用户 系统 流逝 
+0.39 0.16 2.33 
+&gt; stopCluster(cl)
+</code></pre>
+<p>可见并行两次的速度确实有提升，超过了<code>for</code>循环但远逊色于算法2的速度——我的surfaceGo只有两个物理核心，如果电脑允许你可以增加并行次数而降低运算时间。</p>
+<p><strong>尽管如此，我想说的是<code>apply</code>函数并不是如我们以为的那样高效，我们在乎计算时间时便要警惕使用该命令！</strong></p>
+<p>不过，这并不意味着<code>apply</code>函数没有存在的价值。在时间开销并不那么重要时，<code>apply</code>得到的代码十分优雅简洁，也容易理解。</p>
+<h3 id="--apply族其他函数">- apply族其他函数</h3>
+<p><code>apply</code>族函数除了基本的<code>apply</code>命令外，常用的还有<code>lapply</code>和<code>sapply</code>等。</p>
+<pre><code class="language-r">lapply(X, FUN, ...)# X通常为向量、数据框或列表
+</code></pre>
+<p><code>apply</code>命令并不适用于向量，而<code>lapply</code>则显得更加灵活——其中<code>X</code>可取向量、数据框、列表等。例如，我们给定一个向量，然后针对每个元素生成相应数目的均匀随机数，结果用列表储存。</p>
+<pre><code class="language-r">&gt; x &lt;- c(2,3,4)
+&gt; lapply(x, runif)
+[[1]]
+[1] 0.2485223 0.4080533
+
+[[2]]
+[1] 0.9620718 0.5607855 0.2601507
+
+[[3]]
+[1] 0.23525977 0.05190834 0.05177627 0.72261602
+</code></pre>
+<p>如果不喜欢列表储存结果，可以考虑<code>sapply</code>命令，它返回向量或者矩阵。如果<code>FUN</code>得到的结果是一维的，那么<code>sapply</code>就返回一个向量；如果<code>FUN</code>得到的结果是多维的，那么<code>sapply</code>就返回一个矩阵，其每一列对应一个输出结果。</p>
+<p>例如，我们输入一个列表，求其中每一项的均值和方差。</p>
+<pre><code class="language-r">&gt; x &lt;- list(a = 1:3, b = rnorm(100))
+&gt; myfunction &lt;- function(x){
++   return(c(mean(x), var(x)))
++ }
+&gt; sapply(x, myfunction)
+     a          b
+[1,] 2 -0.1352013
+[2,] 1  1.1843918
+</code></pre>
+<p>更多的使用方式和注意细节限于篇幅，不再赘述。</p>
+<h2 id="3-多线程运算">3. 多线程运算</h2>
+<p>实际的数据分析中，我们常常需要重复某一过程数十次以上，例如Cross Validation寻找最优参数。一般每次计算相互独立，但计算的规律又极其相似。除了<code>for</code>循环外，我们能否有高效的方法实现该目的呢？</p>
+<p>答案是肯定的：<strong>R中的多线程运算就能办到。</strong></p>
+<p>我们这里主要介绍<code>foreach</code>程序包中<code>foreach</code>命令的使用方式。假如我们需要计算100个向量的均值（计算互不影响），<code>for</code>循环意味着依次进行均值计算，这显然低效；<code>foreach</code>多线程则可以同时计算多个向量的均值（同时计算多少取决于你电脑的线程数），自然就显得高效。</p>
+<p>因此，<code>foreach</code>可以看作<code>for</code>循环的加强版。它需要事先安装<code>foreach</code>和<code>doPrarllel</code>两个程序包。</p>
+<pre><code class="language-r{.line-numbers}">install.packages(&quot;foreach&quot;)
+install.packages(&quot;doParallel&quot;)
+</code></pre>
+<h3 id="--基本使用介绍">- 基本使用介绍</h3>
+<p>它的基本用法为</p>
+<pre><code class="language-r">library(foreach)
+library(doParallel)
+cl &lt;- makeCluster(&lt;size of pool&gt;)
+registerDoParallel(cl)# 注册并行的线程
+foreach(..., .combine)  %dopar% FUN # 并行计算FUN
+stopImplicitCluster()# 关闭并行
+</code></pre>
+<p>首先，我们需要确定多线程数并进行注册使用。如果你不知道自己电脑可用的线程数，可以使用<code>detectCores</code>命令获得；通过添加参数<code>logical = F</code>可以得到电脑的实际物理核心数，也即是真正可供调用的实体核心。</p>
+<pre><code class="language-r">&gt; detectCores()
+[1] 4
+&gt; detectCores(logical = F)
+[1] 2
+</code></pre>
+<p>可见我的surfaceGo实际有两个物理核心，但可以虚拟两个核心出来。因此，我们可以设置的线程数不超过3个——电脑的运行也需要核心维持，故不能跑满。</p>
+<p>其次，我们解释一下<code>foreach</code>的各个参数。<code>...</code>是函数<code>FUN</code>进行计算的变量，可为一个或多个。<code>.combine</code>则是设置输出的结果形式，如用<code>+</code>连接、用<code>rbind</code>拼接成矩阵等。</p>
+<p>最后，我们使用<code>stopImplicitCluster()</code>关闭并行而不是<code>stopCluster()</code>命令。</p>
+<h3 id="案例分析">案例分析</h3>
+<p>我们考虑两个向量对应的的分量和与分量积，输出结果为一个矩阵。那么，程序可以写成</p>
+<pre><code class="language-r{.line-numbers}">myfun &lt;- function(a, b){
+  return(c(a+b, a*b))
+}
+cl &lt;- makeCluster(2)
+registerDoParallel(cl)
+res &lt;- foreach(x = 1:5, y = 6:10, .combine = &quot;rbind&quot;) %dopar% myfun(x, y)
+stopImplicitCluster()
+</code></pre>
+<p>查看结果为</p>
+<pre><code class="language-r">&gt; res
+         [,1] [,2]
+result.1    7    6
+result.2    9   14
+result.3   11   24
+result.4   13   36
+result.5   15   50
+</code></pre>
+<p>我在使用<code>foreach</code>包的过程中发现，<strong>当问题规模不大、计算过程简单时，<code>foreach</code>调用计算机资源所消耗的时间反而让人得不偿失。</strong> 我们用下面的案例来说明问题。</p>
+<p>考虑前面的最小二乘案例，样本观测数固定为1000，重复估计1000次。</p>
+<pre><code class="language-r{.line-numbers}">&gt; myfun &lt;- function(){
++   x &lt;- rnorm(1000)
++   y &lt;- x*2 + 0.1*rnorm(1000)
++   ols3(x, y)
++ }
+&gt; system.time(# for循环
++   for(i in 1:1000){
++     myfun()
++   }
++ )
+用户 系统 流逝 
+0.36 0.00 0.36 
+&gt; cl &lt;- makeCluster(2)
+&gt; registerDoParallel(cl)
+&gt; system.time(# foreach并行
++   foreach(i = 1:1000, .combine = &quot;rbind&quot;) %dopar% myfun()
++ )
+用户 系统 流逝 
+0.83 0.33 1.45 
+&gt; stopImplicitCluster()
+</code></pre>
+<p><strong>这也和我们开头所呼应：如果算法先天不足、设计不合理，指望通过某个函数或程序包暴力提升运算速度，就很难得到满意的结果。</strong></p>
+<h3 id="--一点补充">- 一点补充</h3>
+<p>现在我们编写函数，将<code>foreach</code>得到的100个最小二乘估计的平均值作为最终的解。你的函数若像下面一样编写</p>
+<pre><code class="language-r{.line-numbers}">meanb &lt;- function(){
+  cl &lt;- makeCluster(2)
+  registerDoParallel(cl)
+  bhat &lt;- foreach(i = 1:10, .combine = &quot;rbind&quot;) %dopar% myfun()
+  stopImplicitCluster()
+  return(mean(bhat))
+}
+</code></pre>
+<p>调用后，就现找不到<code>myfun</code>函数的错误提示</p>
+<pre><code class="language-r">&gt; meanb()
+ Error in myfun() : task 1 failed - &quot;没有&quot;myfun&quot;这个函数&quot;
+</code></pre>
+<p><strong>原因是<code>foreach</code>被嵌套进函数后无法使用函数外部的变量。</strong> 因此，我们需要添加<code>.export</code>参数，将需要的外部变量传递到函数内部，也即是</p>
+<pre><code class="language-r{.line-numbers}">bhat &lt;- foreach(i = 1:10, .export = c(&quot;ols3&quot;, &quot;myfun&quot;), .combine = &quot;rbind&quot;)
+</code></pre>
+<p>这样，你在外部定义所需变量后再运行<code>meanb</code>函数，就能正常输出结果</p>
+<pre><code class="language-r">&gt; meanb()
+[1] 2.001765
+}
+</code></pre>
+<h2 id="4-写在最后">4. 写在最后</h2>
+<p>本次我们学习了R提升速度的常见思路和注意事项。最后再次提醒大家，理解自己的问题和程序结构最重要，盲目通过某些命令来暴力提升计算速度，可能会适得其反。</p>
+
+    </div>
+    <div class="article-footer">
+<blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接: </strong>
+      <a href="https://jiandan94.github.io/2020/03/rparallel/" title="提升R的运算速度" target="_blank" rel="external">https://jiandan94.github.io/2020/03/rparallel/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong>License：</strong><a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN</a>
+    </li>
+  </ul>
+</blockquote>
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://www.researchgate.net/profile/Kai_Qi7" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://jiandan94.github.io/qkai.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://www.researchgate.net/profile/Kai_Qi7" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学在读博士</small></a></h3>
+        <div>科研狗, 旅游, 烹饪</div>
+      </div>
+    </figure>
+  </div>
+</div>
+    </div>
+  </article>
+<section id="comments">
+    <div id="vcomments"></div>
+</section>
+
+</div><nav class="bar bar-footer clearfix" data-stick-bottom>
+    <div class="bar-inner">
+        <ul class="pager pull-left">
+            <li class="prev">
+                <a href="https://jiandan94.github.io/about/" title=""><i
+                        class="icon icon-angle-left"
+                        aria-hidden="true"></i><span>&nbsp;&nbsp;下一篇</span></a>
+            </li>
+            
+            <li class="toggle-toc">
+                <a class="toggle-btn collapsed" data-toggle="collapse" href="#collapseToc" aria-expanded="false"
+                    title="文章目录" role="button">
+                    <span>[&nbsp;</span><span>文章目录</span>
+                    <i class="text-collapsed icon icon-anchor"></i>
+                    <i class="text-in icon icon-close"></i>
+                    <span>]</span>
+                </a>
+            </li>
+        </ul>
+        <div class="bar-right">
+            <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter"
+                data-mobile-sites="weibo,qq,qzone"></div>
+        </div>
+    </div>
+</nav>
+
+</main><footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+<ul class="social-links">
+    <li><a href="https://jiandan94.github.io/index.xml" target="_blank" title="rss" data-toggle=tooltip data-placement=top >
+            <i class="icon icon-rss"></i></a></li>
+</ul>
+  <div class="copyright">
+    &copy;2019  -
+    2020
+    <div class="publishby">
+        Theme by <a href="https://github.com/xiaoheiAh" target="_blank"> xiaoheiAh </a>base on<a href="https://github.com/xiaoheiAh/hugo-theme-pure" target="_blank"> pure</a>.
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_SVG"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+            showMathMenu: false, //disables context menu
+            tex2jax: {
+            inlineMath: [ ['$','$'], ['\\(','\\)'] ]
+           }
+    });
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+<script>
+    window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/highlight.min.js"></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/python.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/javascript.min.js" defer></script>
+<script type="text/javascript" src="https://cdn.staticfile.org/highlight.js/9.15.10/languages/r.min.js" defer></script><script>
+    hljs.configure({
+        tabReplace: '    ', 
+        classPrefix: ''     
+        
+    })
+    hljs.initHighlightingOnLoad();
+</script>
+<script src="https://jiandan94.github.io/js/application.min.bdeb64b910570b6c41badc6a05b7afb0c8ad9efd8525de3c7257d59e786326a3.js"></script>
+<script src="https://jiandan94.github.io/js/plugin.min.51ff8c7317566f82259170fa36e09c4493adc9b9378b427a01ad3f017ebac7dd.js"></script>
+
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(未命名)',
+            },
+            ROOT_URL: 'https:\/\/jiandan94.github.io\/',
+            CONTENT_URL: 'https:\/\/jiandan94.github.io\/\/searchindex.json ',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script type="text/javascript" src="https://jiandan94.github.io/js/insight.min.a343cd9a5a7698336b28ef3a7c16a3a1b1d2d5fb17dc8ed04022bbe08cc5459073a15bdafa3a8a58cdd56080784bdd69fa70b1ae8597565c799c57ed00f0e120.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+<script>
+    tocbot.init({
+        
+        tocSelector: '.js-toc',
+        
+        contentSelector: '.js-toc-content',
+        
+        headingSelector: 'h1, h2, h3',
+        
+        hasInnerContainers: true,
+    });
+</script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="https://cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/valine"></script>
+<script type="text/javascript">
+    var GUEST = ['nick', 'mail', 'link'];
+    var meta = 'nick,mail';
+    meta = meta.split(',').filter(function (item) {
+        return GUEST.indexOf(item) > -1;
+    });
+    new Valine({
+        el: '#vcomments',
+        verify: null ,
+        notify: false ,
+        appId: 'lUCxYn9g9w2PaI6fpfF3qVqC-gzGzoHsz',
+        appKey: 'UzvlhF9DfF5SB6WKO5N2tP4i',
+        placeholder: '欢迎留言~',
+        avatar: 'mm',
+        meta: meta,
+        pageSize: '10' || 10,
+        visitor: false 
+});
+</script>
+
+  </body>
+</html>
