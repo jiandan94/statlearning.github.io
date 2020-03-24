@@ -5,7 +5,7 @@
     <link>https://jiandan94.github.io/</link>
     <description>Recent content on 幽篁里</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 23 Mar 2020 21:11:58 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 23 Mar 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://jiandan94.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -13,10 +13,55 @@
     <item>
       <title>提升R的运算速度</title>
       <link>https://jiandan94.github.io/2020/03/rparallel/</link>
-      <pubDate>Mon, 23 Mar 2020 21:11:58 +0800</pubDate>
+      <pubDate>Mon, 23 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://jiandan94.github.io/2020/03/rparallel/</guid>
       <description>最近有读者私信希望介绍R并行计算的方法。在处理较大规模问题时，默认单线程的R显得力不从心。提升运算速度确实在数据分析中意义重大，其中酸爽调参</description>
+    </item>
+    
+    <item>
+      <title>广义线性模型及其一般求解方式</title>
+      <link>https://jiandan94.github.io/2020/03/glm/</link>
+      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/2020/03/glm/</guid>
+      <description>线性模型的局限性 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。</description>
+    </item>
+    
+    <item>
+      <title>逻辑回归模型</title>
+      <link>https://jiandan94.github.io/2020/03/logistic-regression/</link>
+      <pubDate>Sun, 15 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/2020/03/logistic-regression/</guid>
+      <description>1 线性模型的局限性 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题往往更加复杂，$y$ 并不总是满足正态分布的假设。 例</description>
+    </item>
+    
+    <item>
+      <title>关于外国人永久居住条例的简单看法</title>
+      <link>https://jiandan94.github.io/2020/03/immigration-policy/</link>
+      <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/2020/03/immigration-policy/</guid>
+      <description>最近，外国人永久居住条例在年轻人群体中掀起不小的风波。估计有关部门可能都没想到这个条例是个大雷，会有这么的能量。 围观微博一圈，大家对于该条例</description>
+    </item>
+    
+    <item>
+      <title>漫谈最小二乘法</title>
+      <link>https://jiandan94.github.io/2019/08/forum-ols/</link>
+      <pubDate>Fri, 02 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/2019/08/forum-ols/</guid>
+      <description>如果随便逮到一个统计专业的学生问他“统计方法谁家强”，相信大部分人会异口同声得说“最小二乘法”。 的确，最小二乘法是一种非常重要的统计方法，它</description>
+    </item>
+    
+    <item>
+      <title>线性回归模型简介</title>
+      <link>https://jiandan94.github.io/2019/07/lm/</link>
+      <pubDate>Fri, 26 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/2019/07/lm/</guid>
+      <description>1 导言 回归分析是一个古老的话题。一百多年前，英国的统计学家高尔顿 (F. Galton，1822-1911) 和他的学生皮尔逊 (K. Pearson，185</description>
     </item>
     
     <item>
