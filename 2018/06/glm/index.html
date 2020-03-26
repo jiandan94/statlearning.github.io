@@ -42,7 +42,7 @@
 <meta itemprop="description" content="1 指数族分布与广义线性模型 1.1 引入指数族分布 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的">
 <meta itemprop="datePublished" content="2018-06-15T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2018-06-15T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="3375">
+<meta itemprop="wordCount" content="5951">
 
 
 
@@ -151,7 +151,7 @@
     <h3 class="widget-title">公告</h3>
     <div class="widget-body">
         <div id="board">
-            <div class="content"><p>Welcome to StatLeaning!</p>
+            <div class="content"><p>欢迎来到幽篁里!</p>
             </div>
         </div>
     </div>
@@ -208,10 +208,6 @@
             
             
             <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
-                    class="tag-list-count">1</span></li>
-            
-            
-            <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/%E7%BA%BF%E6%80%A7%E6%A8%A1%E5%9E%8B/" class="tag-list-link">线性模型</a><span
                     class="tag-list-count">1</span></li>
             
             
@@ -336,8 +332,8 @@
 	</span>
         <span class="post-comment"><i class="icon icon-comment"></i>&nbsp;<a href="/2018/06/glm/#comments"
             class="article-comment-link">评论</a></span>
-		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3375字</span>
-		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7分 </span>
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 5951字</span>
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 12分 </span>
       </div>
     </div>
     <div class="article-entry marked-body js-toc-content" itemprop="articleBody">
@@ -562,8 +558,144 @@ $$</p>
 \end{split}
 $$</p>
 <p>这样就得到了估计量的求解迭代公式。</p>
-<p>我们以Poisson分布为例，根据上面的迭代公式编写出相应的<code>R</code>求解程序。</p>
-<pre><code class="language-r{.line-numbers}">##本程序用来求解广义线性模型中——Poisson模型的解
+<h2 id="4-模拟分析">4 模拟分析</h2>
+<p>在<code>R</code>中，我们有<code>glm</code>函数求解广义线性模型。这里，我结合前面的分析自己编写的相应的参数估计和假设检验的函数，包括二项分布（逻辑回归）、Poisson分布。<strong>这些代码附在最后供参考。</strong></p>
+<p>以Poisson分布举例，考虑符合Poisson分布的观测，其中链接函数为</p>
+<p>$$
+\eta _i=\ln \mu _i
+$$</p>
+<p>我们生成 $\mathbb{R}^{1000\times 5}$ 的设计矩阵 $X$，系数 $\beta =\left( 1,3,2,4,5 \right) ^{\mathrm{T}}$，使用自编的广义线性模型求解算法求解该模型得到</p>
+<p><img src="/glm/myglm.png" alt=""></p>
+<p>这里的<code>myglm</code>是我自编的广义线性模型求解函数，其中囊括了线性模型、二项分布模型（逻辑回归）和Poisson模型的参数估计和显著性检验。对比一下<code>R</code>中的<code>glm</code>包求解的结果</p>
+<p><img src="/glm/glm.png" alt=""></p>
+<p>可以看到结果几乎是一样的。</p>
+<h2 id="5-自编函数代码">5 自编函数代码</h2>
+<h3 id="51-模型求解">5.1 模型求解</h3>
+<p>实际使用，主要运行该代码即可。这个代码整合了参数估计、检验等代码，将结果合并输出。</p>
+<pre><code class="language-r">## This program is to solve the generalized linear models: logistic, poisson
+
+myglm &lt;- function(x,y,b0,alpha = 0.05,family = &quot;poisson&quot;){#
+  
+  options(digits = 4)
+  
+  # family has two choice: logistic and poisson
+  # alpha is the significance of the interval estimate of the coefficients
+  
+  # solve the model
+  if(family == &quot;logistic&quot;){
+    glm.result &lt;- myglmlogistic(x,y,beta1 = b0)
+  }
+  else if(family == &quot;poisson&quot;){
+    glm.result &lt;- myglmpoisson(x,y,beta1 = b0)
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic,poisson之一&quot;))
+  }
+  
+  b &lt;- glm.result$模型的解
+  y.fit &lt;- glm.result$拟合值
+  num &lt;- glm.result$算法迭代次数
+  
+  # hypothesis testing
+  indivi &lt;- myglmindivi(x,y,b,expr = family)
+  
+  # confidence interval
+  inter.sig &lt;- myglminterval(x,y,b,alpha = alpha,expr = family)
+  
+  bname &lt;- paste0(rep(&quot;beta&quot;,length(b)),1:length(b))
+  
+  # the residuls
+  # glm.residual &lt;- y - y.fit
+  # res1 &lt;- summary(glm.residual)
+  # names(res1) &lt;- c(&quot;最小值&quot;,&quot;下四分位数&quot;,&quot;中位数&quot;,&quot;均值&quot;,&quot;上四分位数&quot;,&quot;最大值&quot;)
+  
+  estimate.test &lt;- data.frame(
+    &quot;估计值&quot; = b,
+    &quot;下界&quot; = inter.sig[,2],
+    &quot;上界&quot; = inter.sig[,3],
+    &quot;z值&quot; = indivi$Tu,
+    &quot;P值(&gt;|z|)&quot; = indivi$Tp,
+    &quot;置信度&quot; = indivi$Ts,check.names = F
+  )
+  
+  # output the results
+    cat(&quot;\n&quot;)
+    cat(&quot;Call: 这是不带截距项的&quot;,family,&quot;模型,&quot;,&quot;下面是模型的分析结果：&quot;,seq = &quot;&quot;,&quot;\n&quot;)
+    cat(&quot;\n&quot;)
+    cat(&quot;参数估计结果:&quot;,&quot;\n&quot;)
+    cat(&quot;\n&quot;)
+    print(estimate.test)
+    cat(&quot;---&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;置信度:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1&quot;,&quot;&quot;,&quot;\n&quot;)
+    cat(&quot;区间估计的置信水平为：&quot;,alpha,&quot;\n&quot;)
+    cat(&quot;---&quot;,&quot;\n&quot;)
+    cat(&quot;Fisher信息矩阵的迭代次数为:&quot;,num,&quot;次&quot;,&quot;\n&quot;)
+}
+</code></pre>
+<h3 id="52-logistic模型的解">5.2 Logistic模型的解</h3>
+<pre><code class="language-r">##本程序用来求解广义线性模型中——logistic模型的解
+myglmlogistic &lt;- function(x,y,beta1,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+  x &lt;- as.matrix(x)
+  y &lt;- as.matrix(y)
+  
+  g &lt;- expression(log(mu/(1 - mu)))# the link function
+  h &lt;- expression(1/(1 + exp(-eta)))# the inverse of the link funtion
+  dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+  b &lt;- expression(log(1 + exp(theta)))# the b(theta) function of the pdf
+  db &lt;- D(b,&quot;theta&quot;)# the first derivative funtion of b
+  ddb &lt;- D(db,&quot;theta&quot;)# the second derivative funtion of b
+  db.inverse &lt;- expression(log(mu/(1 - mu)))# the inverse of db
+  
+  k &lt;- 1
+  beta0 &lt;- beta1 + 1
+  while(sum((beta0 - beta1)^2) &gt;= e){
+    
+    beta0 &lt;- beta1
+    
+    # compute the D matrix
+    eta &lt;- x%*%beta1
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x
+    
+    # compute v.inverse—the inverse matrix of the covariance matrix of y
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))
+    
+    p1 &lt;- solve(t(D)%*%v.inverse%*%D)
+    p2 &lt;- t(D)%*%v.inverse%*%delta
+    p3 &lt;- x%*%beta1 + v.inverse%*%(y - mu)
+    
+    beta1 &lt;- p1%*%p2%*%p3# the kth estimates
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(beta1)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(beta1) &lt;- c(&quot;估计值&quot;)
+  rownames(beta1) &lt;- paste0(rep(&quot;系数&quot;,length(beta1)),1:length(beta1))
+  eta &lt;- x%*%beta1
+  y.fit &lt;- eval(h)# compute the fitting values of y
+  glmlogistic.result &lt;- list(&quot;模型的解&quot; = beta1,&quot;算法迭代次数&quot; = k-1,&quot;拟合值&quot; = y.fit)
+  return(glmlogistic.result)
+}
+</code></pre>
+<h3 id="53-poisson模型的解">5.3 Poisson模型的解</h3>
+<pre><code class="language-r">##本程序用来求解广义线性模型中——Poisson模型的解
 myglmpoisson &lt;- function(x,y,beta1,N = 5000,e = 1e-10){#
 	# x is the design matrix
 	# b is the starting value of the iteration
@@ -585,6 +717,7 @@ myglmpoisson &lt;- function(x,y,beta1,N = 5000,e = 1e-10){#
 	k &lt;- 1
 	beta0 &lt;- beta1 + 1
 	while(sum((beta0 - beta1)^2) &gt;= e){
+	
 		beta0 &lt;- beta1
 		
 		# compute the D matrix
@@ -623,16 +756,215 @@ myglmpoisson &lt;- function(x,y,beta1,N = 5000,e = 1e-10){#
 	return(glmpoisson.result)
 }
 </code></pre>
-<h2 id="4-模拟分析">4 模拟分析</h2>
-<p>我们还是就Poisson分布举例，考虑符合Poisson分布的观测，其中链接函数为</p>
-<p>$$
-\eta _i=\ln \mu _i
-$$</p>
-<p>我们生成 $\mathbb{R}^{1000\times 5}$ 的设计矩阵 $X$，系数 $\beta =\left( 1,3,2,4,5 \right) ^{\mathrm{T}}$，使用自编的广义线性模型求解算法求解该模型得到</p>
-<p><img src="/glm/myglm.png" alt=""></p>
-<p>这里的<code>myglm</code>是我自编的广义线性模型求解函数，其中囊括了线性模型、二项分布模型（逻辑回归）和Poisson模型的参数估计和显著性检验。对比一下<code>R</code>中的<code>glm</code>包求解的结果</p>
-<p><img src="/glm/glm.png" alt=""></p>
-<p>可以看到结果几乎是一样的。</p>
+<h3 id="54-拟似然">5.4 拟似然</h3>
+<pre><code class="language-r">##
+##This program is quasi-likelihood method
+##
+
+myquasimle &lt;- function(x,y,beta1,family,N = 5000,e = 1e-10){#
+  # x is the design matrix
+  # b is the starting value of the iteration
+  # N is the upper bound of the times of the iteration
+  # e is the convergence criteria
+  
+  n &lt;- length(x)
+  x &lt;- as.matrix(x)
+  y &lt;- as.matrix(y)
+  
+  v.mu &lt;- expression(mu^2)# The covariance function of y
+  
+  if(family == &quot;possion&quot;){
+    h &lt;- expression(exp(eta))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+  }
+  else if(family == &quot;logistic&quot;){
+    h &lt;- expression(1/(1 + exp(-eta)))
+    dh &lt;- D(h,&quot;eta&quot;)
+  }
+  else{
+    print(&quot;分布参数错误, 请选择logistic或者possion分布！！！！&quot;)
+  }
+  
+  k &lt;- 1
+  beta0 &lt;- beta1 + 1
+  while(sum((beta0 - beta1)^2) &gt;= e){
+    
+    beta0 &lt;- beta1
+    
+    # compute the D matrix
+    eta &lt;- x%*%beta1
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x
+    
+    # compute v.inverse—the inverse matrix of the covariance matrix of y
+    mu &lt;- eval(h)
+    v.inverse &lt;- diag(1/as.vector(eval(v.mu)))
+    
+    p1 &lt;- solve(t(D)%*%v.inverse%*%D)
+    p2 &lt;- t(D)%*%v.inverse%*%delta
+    p3 &lt;- x%*%beta1 + v.inverse%*%(y - mu)
+    
+    beta1 &lt;- p1%*%p2%*%p3# the kth estimates
+    
+    # check if it is divergent
+    if(k &gt; N){
+      cat(&quot;算法不收敛，已达到最大迭代次数：&quot;,N,&quot;\n&quot;)
+      cat(&quot;此时得到的解为：&quot;,&quot;&quot;,&quot;\n&quot;)
+      print(beta1)
+      break
+    }
+    else{
+      k &lt;- k + 1
+    }
+  }
+  
+  colnames(beta1) &lt;- c(&quot;估计值&quot;)
+  rownames(beta1) &lt;- paste0(rep(&quot;系数&quot;,length(beta1)),1:length(beta1))
+  eta &lt;- x%*%beta1
+  y.fit &lt;- eval(h)# compute the fitting values of y
+  quasi.result &lt;- list(&quot;模型的解&quot; = beta1,&quot;算法迭代次数&quot; = k-1,&quot;拟合值&quot; = y.fit)
+  return(quasi.result)
+}
+</code></pre>
+<h3 id="55-单个系数检验">5.5 单个系数检验</h3>
+<pre><code class="language-r">## 求解广义线性模型单个系数检验
+myglmindivi &lt;- function(x,y,b,expr){#
+  # expr 表示模型：logistic, poisson
+  # b 表示由广义线性模型估计得到的估计量
+  n &lt;- length(x)
+  p &lt;- length(b)
+  
+  beta.hat &lt;- b
+  D &lt;- matrix(0, nrow = n, ncol = p)
+  
+  # get the D matrix
+  if(expr == &quot;logistic&quot;){
+    h &lt;- expression(1/(1 + exp(-eta)))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    b &lt;- expression(log(1 + exp(theta)))# the b(theta) function of the pdf
+    db &lt;- D(b,&quot;theta&quot;)# the first derivative funtion of b
+    ddb &lt;- D(db,&quot;theta&quot;)# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu/(1 - mu)))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else if(expr == &quot;poisson&quot;){
+    h &lt;- expression(exp(eta))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    db &lt;- expression(exp(theta))# the first derivative funtion of b
+    ddb &lt;- expression(exp(theta))# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic,poisson之一&quot;))
+  }
+  
+  cc &lt;- solve(t(D)%*%v.inverse%*%D)
+  diagc &lt;- diag(cc)
+  
+  Tt &lt;- 1:p;Tp &lt;- Tt;Ts &lt;- Tt
+  
+  for(i in 1:p){
+    
+    Tt[i] &lt;- beta.hat[i]/sqrt(diagc[i])
+    Tp[i] &lt;- 2*(1 - pnorm(Tt[i]))
+    if(Tp[i] &lt; 0.001 ){# 判断置信度
+      Ts[i] &lt;- c(&quot;***&quot;)
+    }
+    else if(Tp[i] &lt; 0.01 &amp;&amp; Tp[i] &gt;= 0.001){
+      Ts[i] &lt;- c(&quot;**&quot;)
+    }
+    else if(Tp[i] &lt; 0.05 &amp;&amp; Tp[i] &gt;= 0.01){
+      Ts[i] &lt;- c(&quot;*&quot;)
+    }
+    else if(Tp[i] &lt; 0.1 &amp;&amp; Tp[i] &gt;= 0.05){
+      Ts[i] &lt;- c(&quot;.&quot;)
+    }
+    else{
+      Ts[i] &lt;- c(&quot; &quot;)
+    }
+  }
+  
+  indivitest &lt;- data.frame(&quot;Tu&quot; = Tt,&quot;Tp&quot; = Tp,&quot;Ts&quot; = Ts)
+  return(indivitest)
+}
+</code></pre>
+<h3 id="56-区间估计">5.6 区间估计</h3>
+<pre><code class="language-r">## the confidence interval of the generalized linear model
+myglminterval &lt;- function(x,y,b,expr,alpha = 0.05){
+  
+  n &lt;- length(x)
+  p &lt;- length(b)
+  
+  beta.hat &lt;- b
+  D &lt;- matrix(0, nrow = n, ncol = p)
+  
+  # get the D matrix
+  if(expr == &quot;logistic&quot;){
+    h &lt;- expression(1/(1 + exp(-eta)))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    b &lt;- expression(log(1 + exp(theta)))# the b(theta) function of the pdf
+    db &lt;- D(b,&quot;theta&quot;)# the first derivative funtion of b
+    ddb &lt;- D(db,&quot;theta&quot;)# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu/(1 - mu)))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else if(expr == &quot;poisson&quot;){
+    h &lt;- expression(exp(eta))# the inverse of the link funtion
+    dh &lt;- D(h,&quot;eta&quot;)# the first derivative funtion of h
+    db &lt;- expression(exp(theta))# the first derivative funtion of b
+    ddb &lt;- expression(exp(theta))# the second derivative funtion of b
+    db.inverse &lt;- expression(log(mu))# the inverse of db
+    
+    eta &lt;- x%*%beta.hat
+    delta &lt;- diag(as.vector(eval(dh)))
+    D &lt;- delta%*%x# the D matrix
+    
+    mu &lt;- eval(h)
+    theta &lt;- eval(db.inverse)
+    v.inverse &lt;- diag(1/as.vector(eval(ddb)))# the inverse of the covariance matrix of y
+  }
+  else{
+    stop(cat(&quot;!!!!!!模型参数错误，请选择给定模型logistic, gompertz, weibull之一&quot;))
+  }
+  
+  Ti &lt;- matrix(0,nrow = p,ncol = 2)
+  
+  
+  cc &lt;- solve(t(D)%*%v.inverse%*%D)
+  diagc &lt;- diag(cc)
+  
+  for(i in 1:p){
+    Ti[i,1] &lt;- beta.hat[i] - qnorm((1-alpha/2))*sqrt(diagc[1])
+    Ti[i,2] &lt;- beta.hat[i] + qnorm((1-alpha/2))*sqrt(diagc[1])  
+  }
+  
+  out &lt;- cbind(beta.hat,Ti)
+  colnames(out) &lt;- c(&quot;Estimator&quot;,&quot;LowerBound&quot;,&quot;UpperBound&quot;)
+  return(out)
+}
+</code></pre>
 
     </div>
     <div class="article-footer">
@@ -658,7 +990,7 @@ $$</p>
       </div>
       <div class="media-body">
         <h3 class="media-heading"><a href="https://www.researchgate.net/profile/Kai_Qi7" target="_blank"><span class="text-dark">齐 凯</span><small class="ml-1x">统计学博士</small></a></h3>
-        <div>科研狗, 旅游, 烹饪</div>
+        <div>科研狗, 诗词, 烹饪, 书法</div>
       </div>
     </figure>
   </div>
@@ -832,7 +1164,7 @@ $$</p>
 <script src="https://cdn.jsdelivr.net/npm/valine"></script>
 <script type="text/javascript">
     var GUEST = ['nick', 'mail', 'link'];
-    var meta = 'nick,mail';
+    var meta = 'nick';
     meta = meta.split(',').filter(function (item) {
         return GUEST.indexOf(item) > -1;
     });
