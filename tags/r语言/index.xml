@@ -119,21 +119,21 @@
     </item>
     
     <item>
-      <title>线性模型的理论与求解</title>
-      <link>https://jiandan94.github.io/2018/05/lm/</link>
+      <title>非线性模型的参数估计和统计性质</title>
+      <link>https://jiandan94.github.io/2018/05/nlm/</link>
       <pubDate>Fri, 18 May 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://jiandan94.github.io/2018/05/lm/</guid>
-      <description>本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的R</description>
+      <guid>https://jiandan94.github.io/2018/05/nlm/</guid>
+      <description>这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应</description>
     </item>
     
     <item>
-      <title>非线性模型的参数估计和统计性质</title>
-      <link>https://jiandan94.github.io/2018/04/nlm/</link>
+      <title>线性模型的理论与求解</title>
+      <link>https://jiandan94.github.io/2018/04/lm/</link>
       <pubDate>Fri, 20 Apr 2018 00:00:00 +0000</pubDate>
       
-      <guid>https://jiandan94.github.io/2018/04/nlm/</guid>
-      <description>这个笔记总结了非线性模型的极大似然估计量和渐进性质，并推导了用于求解模型的Gauss—Newton迭代法。此外，针对每个内容，我还给出了相应</description>
+      <guid>https://jiandan94.github.io/2018/04/lm/</guid>
+      <description>本文总结了线性模型的主要知识点，分别为参数估计，包括最小二乘估计和极大似然估计，区间估计，假设检验。此外，针对每个内容，本文还给出了相应的R</description>
     </item>
     
     <item>
