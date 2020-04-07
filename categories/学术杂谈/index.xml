@@ -5,10 +5,19 @@
     <link>https://jiandan94.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/</link>
     <description>Recent content in 学术杂谈 on KAI | 齐凯</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 02 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 07 Apr 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://jiandan94.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>变量选择与LASSO</title>
+      <link>https://jiandan94.github.io/2020/04/lasso-introduction/</link>
+      <pubDate>Tue, 07 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/2020/04/lasso-introduction/</guid>
+      <description>1 为什么要做变量选择？ 变量选择又叫模型选择，因为选出不同的变量自然就建立出不同的模型。近30年来，变量选择理论繁荣发展并逐渐渗透到各个领域中</description>
+    </item>
     
     <item>
       <title>股票数据的合并</title>
@@ -179,15 +188,6 @@
       
       <guid>https://jiandan94.github.io/2016/11/dnlc/</guid>
       <description>蓝桥古驿无踪觅， 不见崔郎遇云英。 可怜浆向虽易乞， 难容相访饮牛津。</description>
-    </item>
-    
-    <item>
-      <title>过银杏道</title>
-      <link>https://jiandan94.github.io/2016/10/gyxd/</link>
-      <pubDate>Wed, 26 Oct 2016 00:00:00 +0000</pubDate>
-      
-      <guid>https://jiandan94.github.io/2016/10/gyxd/</guid>
-      <description>银杏叶黄暑气收， 天凉月高怕登楼。 怕登楼。 一见鸿书销眉愁。 夜浣碧纱掩薄秋， 累君多奔走， 愿撷晚霞作兰舟。 君言舟摇珠帘招， 风也飘飘雨潇潇。 雨潇潇。</description>
     </item>
     
   </channel>
