@@ -436,7 +436,7 @@ wdbc_fit &lt;- glm(y~., data = wdbc_train, family = binomial(link = &quot;logit&
 </tbody>
 </table>
 <p>可以算出模型的预测准确率为(155+215)/400=0.925，仅三个变量就可以很好的预测病人肿瘤的状态。</p>
-<p>不过分类问题中，大家比较关心模型的<strong>敏感性和特异性。</strong> 敏感性指真阳性率，而特异性指真阴性率。以本案例而言，模型的敏感性为0.947，特异性为0.896。这么看来，我们的模型假阳性率为0.053，还是不错的。</p>
+<p>不过分类问题中，大家比较关心模型的<strong>敏感性和特异性。</strong> 敏感性指真阳性率，而特异性指真阴性率。以本案例而言，模型的敏感性为0.947，特异性为0.896。这么看来，我们的模型假阳性率为0.104，还是不太好。</p>
 <pre><code class="language-r{.line-numbers}">library(pROC)
 roclong &lt;- plot.roc(wdbc_train$y, lty = 1, train_pre, grid = T,
                     percent=TRUE,ci=TRUE,col=&quot;red&quot;,
