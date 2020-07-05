@@ -5,10 +5,19 @@
     <link>https://jiandan94.github.io/tags/%E7%AE%97%E6%B3%95/</link>
     <description>Recent content in 算法 on KAI | 齐凯</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 27 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jul 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://jiandan94.github.io/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>RStudio-Server与远程交互</title>
+      <link>https://jiandan94.github.io/2020/07/rstudio-server/</link>
+      <pubDate>Sun, 05 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiandan94.github.io/2020/07/rstudio-server/</guid>
+      <description>0 写在前面 作为经常用R跑程序、处理数据的你是否有过这样的苦恼：台式机性能强大但携带不便，笔记本携带自如但性能薄弱，每次只能在两台电脑间来回操</description>
+    </item>
     
     <item>
       <title>变量选择与LASSO</title>
@@ -179,15 +188,6 @@
       
       <guid>https://jiandan94.github.io/2016/11/drgjyd/</guid>
       <description>渝州冬早立，近日尚秋衣。 今明披绣闼，始觉冬意袭。 瑟瑟西风浸，萧萧梧叶稀。 是处斑驳景，唯独缙纭堤。 擎伞盖已去，漏春仍昨夕。 相对相忘言，只道无和</description>
-    </item>
-    
-    <item>
-      <title>读纳兰词</title>
-      <link>https://jiandan94.github.io/2016/11/dnlc/</link>
-      <pubDate>Tue, 08 Nov 2016 00:00:00 +0000</pubDate>
-      
-      <guid>https://jiandan94.github.io/2016/11/dnlc/</guid>
-      <description>蓝桥古驿无踪觅， 不见崔郎遇云英。 可怜浆向虽易乞， 难容相访饮牛津。</description>
     </item>
     
   </channel>

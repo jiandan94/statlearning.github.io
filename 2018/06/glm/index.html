@@ -24,11 +24,11 @@
   
   
   <meta name="description" content="1 指数族分布与广义线性模型 1.1 引入指数族分布 在线性模型中，一个重要的条件便是响应变量 $y$ 须服从正态分布。然而，实际问题中 $y$ 并不总是满足正态分布的" />
-  <meta name="generator" content="Hugo 0.68.1 with theme pure" />
+  <meta name="generator" content="Hugo 0.73.0 with theme pure" />
   <title>广义线性模型及其一般求解方式 - KAI | 齐凯</title>
   
   
-  <link rel="stylesheet" href="https://jiandan94.github.io/css/style.min.498ad57665b4163580844e2246601ec637c1db3289e6701d09f335836d47d8be.css">
+  <link rel="stylesheet" href="https://jiandan94.github.io/css/style.min.a427945f583e717ff86fc0eb4cd6af34916bccf7017867290b626e2cdd5e29bd.css">
   
   <link rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/9.15.10/styles/github.min.css" async>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css" async>
@@ -161,7 +161,7 @@
     <h3 class="widget-title"> 分类</h3>
     <div class="widget-body">
         <ul class="category-list">
-            <li class="category-list-item"><a href="https://jiandan94.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">2</span></li>
+            <li class="category-list-item"><a href="https://jiandan94.github.io/categories/r%E8%AF%AD%E8%A8%80/" class="category-list-link">r语言</a><span class="category-list-count">3</span></li>
             <li class="category-list-item"><a href="https://jiandan94.github.io/categories/%E5%AD%A6%E6%9C%AF%E6%9D%82%E8%B0%88/" class="category-list-link">学术杂谈</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://jiandan94.github.io/categories/%E6%9D%82%E6%96%87/" class="category-list-link">杂文</a><span class="category-list-count">2</span></li>
             <li class="category-list-item"><a href="https://jiandan94.github.io/categories/%E7%AC%94%E8%AE%B0/" class="category-list-link">笔记</a><span class="category-list-count">6</span></li>
@@ -177,7 +177,7 @@
             
             
             <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/r%E8%AF%AD%E8%A8%80/" class="tag-list-link">r语言</a><span
-                    class="tag-list-count">4</span></li>
+                    class="tag-list-count">5</span></li>
             
             
             <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/%E5%88%86%E7%B1%BB%E7%AE%97%E6%B3%95/" class="tag-list-link">分类算法</a><span
@@ -209,7 +209,7 @@
             
             
             <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/%E7%AE%97%E6%B3%95/" class="tag-list-link">算法</a><span
-                    class="tag-list-count">2</span></li>
+                    class="tag-list-count">3</span></li>
             
             
             <li class="tag-list-item"><a href="https://jiandan94.github.io/tags/%E7%BA%B5%E5%90%91%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-list-link">纵向数据分析</a><span
@@ -232,6 +232,16 @@
     <h3 class="widget-title">最新文章</h3>
     <div class="widget-body">
         <ul class="recent-post-list list-unstyled no-thumbnail">
+            <li>
+                <div class="item-inner">
+                    <p class="item-title">
+                        <a href="https://jiandan94.github.io/2020/07/rstudio-server/" class="title">RStudio-Server与远程交互</a>
+                    </p>
+                    <p class="item-date">
+                        <time datetime="2020-07-05 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-07-05</time>
+                    </p>
+                </div>
+            </li>
             <li>
                 <div class="item-inner">
                     <p class="item-title">
@@ -269,16 +279,6 @@
                     </p>
                     <p class="item-date">
                         <time datetime="2020-03-15 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-03-15</time>
-                    </p>
-                </div>
-            </li>
-            <li>
-                <div class="item-inner">
-                    <p class="item-title">
-                        <a href="https://jiandan94.github.io/2020/03/immigration-policy/" class="title">关于外国人永久居住条例的简单看法</a>
-                    </p>
-                    <p class="item-date">
-                        <time datetime="2020-03-10 00:00:00 &#43;0000 UTC" itemprop="datePublished">2020-03-10</time>
                     </p>
                 </div>
             </li>
@@ -426,11 +426,11 @@ S\left( \beta \right) &amp;=\frac{\partial \ln \mathscr{L}\left( \beta ;Y \right
 y_1-\mu _1\newline
 \newline
 y_n-\mu _n\newline
-\end{array} \right)
+\end{array} \right) 
 \newline
-&amp;=\frac{\partial \mu ^{\mathrm{T}}}{\partial \beta}V^{-1}\left( y-\mu \right) =\left( \frac{\partial \mu}{\partial \beta ^{\mathrm{T}}} \right) ^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+&amp;=\frac{\partial \mu ^{\mathrm{T}}}{\partial \beta}V^{-1}\left( y-\mu \right) =\left( \frac{\partial \mu}{\partial \beta ^{\mathrm{T}}} \right) ^{\mathrm{T}}V^{-1}\left( y-\mu \right) 
 \newline
-&amp;=D^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+&amp;=D^{\mathrm{T}}V^{-1}\left( y-\mu \right) 
 \end{split}
 $$</p>
 <p>显然，这和之前求解得到的得分函数形式是一致的。为了得到具体的表达式，需要进一步求解 $D$ 的具体形式。</p>
@@ -441,35 +441,35 @@ $$</p>
 <p>进而</p>
 <p>$$
 \begin{split}
-D&amp;=\frac{\partial \mu}{\partial \beta ^{\mathrm{T}}}=\left( \frac{\partial \mu}{\partial \beta _1},\cdots ,\frac{\partial \mu}{\partial \beta _n} \right) =\left( \dot{h}\left( x _{1}^{\mathrm{T}}\beta \right) x_1,\cdots ,\dot{h}\left( x _{n}^{\mathrm{T}}\beta \right) x _n \right)
+D&amp;=\frac{\partial \mu}{\partial \beta ^{\mathrm{T}}}=\left( \frac{\partial \mu}{\partial \beta _1},\cdots ,\frac{\partial \mu}{\partial \beta _n} \right) =\left( \dot{h}\left( x _{1}^{\mathrm{T}}\beta \right) x_1,\cdots ,\dot{h}\left( x _{n}^{\mathrm{T}}\beta \right) x _n \right) 
 \newline
 &amp;=\left( \begin{matrix}
 \dot{h}\left( x _{1}^{\mathrm{T}}\beta \right)&amp;		&amp;		\newline
 &amp;		\ddots&amp;		\newline
 &amp;		&amp;		\dot{h}\left( x _{n}^{\mathrm{T}}\beta \right)\newline
-\end{matrix} \right) \left( x _1,\cdots ,x _n \right)
+\end{matrix} \right) \left( x _1,\cdots ,x _n \right) 
 \newline
 &amp;=\Delta X
 \end{split}
 $$</p>
 <p>所以得到 $S(\beta)$ 的最终表达式为</p>
 <p>$$
-S\left( \beta \right) =\left( \Delta X \right) ^{\mathrm{T}}V^{-1}\left( y-\mu \right) =X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right)
+S\left( \beta \right) =\left( \Delta X \right) ^{\mathrm{T}}V^{-1}\left( y-\mu \right) =X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) 
 $$</p>
 <p>为了得到极大似然估计，我们接着求解对应的Fisher信息矩阵。根据定义有：</p>
 <p>$$
-I\left( \beta \right) =E\left( \frac{\partial}{\partial \beta ^{\mathrm{T}}}S\left( \beta \right) \right) =E\left( \frac{\partial ^2\ln \mathscr{L}}{\partial \beta ^{\mathrm{T}}\partial \beta} \right)
+I\left( \beta \right) =E\left( \frac{\partial}{\partial \beta ^{\mathrm{T}}}S\left( \beta \right) \right) =E\left( \frac{\partial ^2\ln \mathscr{L}}{\partial \beta ^{\mathrm{T}}\partial \beta} \right) 
 $$</p>
 <p>根据指数族的性质有</p>
 <p>$$
-E\left( \frac{\partial ^2\ln \mathscr{L}}{\partial \beta ^{\mathrm{T}}\partial \beta} \right) =-E\left( SS^{\mathrm{T}} \right)
+E\left( \frac{\partial ^2\ln \mathscr{L}}{\partial \beta ^{\mathrm{T}}\partial \beta} \right) =-E\left( SS^{\mathrm{T}} \right) 
 $$</p>
 <p>考虑其第 $(i,j)$ 个元素 $S_{ij}=S_iS_j$，则</p>
 <p>$$
 \begin{split}
-E\left( S_iS_j \right) &amp;=E\left[ x _{i}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) x _{j}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) \right]
+E\left( S_iS_j \right) &amp;=E\left[ x _{i}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) x _{j}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) \right] 
 \newline
-&amp;=E\left[ x _{i}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) \left( y-\mu \right) ^{\mathrm{T}}V^{-1}\Delta x _j \right]
+&amp;=E\left[ x _{i}^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) \left( y-\mu \right) ^{\mathrm{T}}V^{-1}\Delta x _j \right] 
 \newline
 &amp;=x _{i}^{\mathrm{T}}\Delta V^{-1}\Delta x _j
 \end{split}
@@ -488,14 +488,14 @@ S\left( \hat{\beta} \right) =S\left( \beta \right) +\frac{\partial}{\partial \be
 $$</p>
 <p>所以</p>
 <p>$$
-\hat{\beta}=\beta +\left( -\frac{\partial S\left( \beta \right)}{\partial \beta ^{\mathrm{T}}} \right) ^{-1}S\left( \beta \right)
+\hat{\beta}=\beta +\left( -\frac{\partial S\left( \beta \right)}{\partial \beta ^{\mathrm{T}}} \right) ^{-1}S\left( \beta \right) 
 $$</p>
 <p>其中括号内的一项过于复杂，在实际求解中可以根据大数定律用其期望代替，由前面的讨论可知其期望即为 $I(\beta)$。这样，模型的极大似然估计可以近似成</p>
 <p>$$
 \begin{split}
-\hat{\beta}&amp;\doteq \beta +\left( X^{\mathrm{T}}\Delta V^{-1}\Delta X \right) ^{-1}X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right)
+\hat{\beta}&amp;\doteq \beta +\left( X^{\mathrm{T}}\Delta V^{-1}\Delta X \right) ^{-1}X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) 
 \newline
-&amp;=\beta +I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right)
+&amp;=\beta +I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right) 
 \end{split}
 $$</p>
 <!-- raw HTML omitted -->
@@ -517,14 +517,14 @@ $$</p>
 <p>其中第二条性质是因为</p>
 <p>$$
 \begin{split}
-E\left( -\frac{\partial S_i}{\partial \mu _i} \right) &amp;=-E\left( \frac{\partial}{\partial \mu _i}\left( \frac{y_i-\mu _i}{\mathrm{Var}y_i} \right) \right)
+E\left( -\frac{\partial S_i}{\partial \mu _i} \right) &amp;=-E\left( \frac{\partial}{\partial \mu _i}\left( \frac{y_i-\mu _i}{\mathrm{Var}y_i} \right) \right) 
 \newline
-&amp;=\frac{1}{\mathrm{Var}y_i}=E\left( S _{i}^{2} \right)
+&amp;=\frac{1}{\mathrm{Var}y_i}=E\left( S _{i}^{2} \right) 
 \end{split}
 $$</p>
 <p>所以根据广义线性模型极大似然思想有</p>
 <p>$$
-\theta _i=\int _{y_i}^{\mu _i}{S_i\left( t \right) \mathrm{d}t}, \quad \theta \left( \mu \right) =\sum _{i=1}^n{\theta \left( \mu _i \right)}=\theta \left( \beta \right)
+\theta _i=\int _{y_i}^{\mu _i}{S_i\left( t \right) \mathrm{d}t}, \quad \theta \left( \mu \right) =\sum _{i=1}^n{\theta \left( \mu _i \right)}=\theta \left( \beta \right) 
 $$</p>
 <p>那么拟似然方法的得分函数可以写成</p>
 <p>$$
@@ -538,10 +538,10 @@ $$</p>
 <p>考虑模型的极大似然估计，其中括号内的一项过于复杂，在实际求解中可以根据大数定律用其期望代替，由前面的讨论可知其期望即为 $I(\beta)$。这样，模型的极大似然估计可以近似成</p>
 <p>$$
 \begin{split}
-\hat{\beta}&amp;\doteq \beta +\left( X^{\mathrm{T}}\Delta V^{-1}\Delta X \right) ^{-1}X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right)
+\hat{\beta}&amp;\doteq \beta +\left( X^{\mathrm{T}}\Delta V^{-1}\Delta X \right) ^{-1}X^{\mathrm{T}}\Delta V^{-1}\left( y-\mu \right) 
 \newline
 &amp;=\beta +I\left( \beta \right) ^{-1}D^{\mathrm{T}}V^{-1}\left( y-\mu \right)
-\end{split}
+\end{split} 
 $$</p>
 <p>这样就得到了估计量的求解迭代公式。</p>
 <h2 id="4-模拟分析">4 模拟分析</h2>
